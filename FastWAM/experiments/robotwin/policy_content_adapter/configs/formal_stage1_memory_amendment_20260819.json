@@ -1,0 +1,48 @@
+{
+  "status": "LOCKED",
+  "kind": "policy_stage1_memory_execution_amendment",
+  "schema_version": 1,
+  "protocol_id": "policy_protocol_v2_stage1_b_cr",
+  "recorded_at_utc": "2026-08-19T06:47:41Z",
+  "stage1_config": {
+    "path": "experiments/robotwin/policy_content_adapter/configs/stage1_clean_random_base.yaml",
+    "sha256": "c80366d7c52d9ee0fe4a406c34b62239678761bc240ccd3d2cb826073e62fa88"
+  },
+  "old_execution": {
+    "local_batch_size_per_gpu": 16,
+    "gradient_accumulation_steps": 1,
+    "world_size": 8,
+    "effective_global_batch_size": 128
+  },
+  "new_execution": {
+    "local_batch_size_per_gpu": 8,
+    "gradient_accumulation_steps": 2,
+    "world_size": 8,
+    "effective_global_batch_size": 128
+  },
+  "unchanged": [
+    "dataset and sample order",
+    "loss formula and weights",
+    "optimizer and learning rate",
+    "cosine scheduler",
+    "five epochs",
+    "effective global batch size",
+    "expected optimizer steps"
+  ],
+  "reason": "The batch16/accum1 execution reached approximately 70.04 GiB allocated per 71.12-GiB GPU and OOMed before the first optimizer update.",
+  "decision_timing": "Before any successful Stage1 optimizer step or parameter update.",
+  "result_dependent_selection": false,
+  "text_cache_content_changed": false,
+  "failed_seed1_batch16_attempt": {
+    "output_directory": "outputs/policy_content_adapter/stage1_clean_random_base_seed1",
+    "completed_optimizer_steps": 0,
+    "parameter_updates": 0,
+    "checkpoint_present": false,
+    "completion_manifest_present": false,
+    "artifacts": {
+      ".stage1_launch_authorized.json": "281cd5deb13250824310e4fd9def3fbbb7b889a6923c8daf4c5a9a03f3d77891",
+      "config.yaml": "5ebf02498497e1a6d6e885474ac1e0bc5847837e55cfcc8fe070ad0ac00f52e9",
+      "stage1_protocol_audit.json": "07f82cf806fd77399980466e61eefef4c52083a09600f58464e62bc4a789b5ff"
+    }
+  }
+}

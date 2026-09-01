@@ -1,0 +1,271 @@
+{
+  "schema": "causalwam.modelscope_upload_plan",
+  "schema_version": 1,
+  "created_utc": "2026-09-01T04:50:00Z",
+  "status": "READY_AFTER_MODELSCOPE_REPOSITORY_ID_IS_PROVIDED",
+  "github_repository": "https://github.com/StevenBSF/CausalWAM",
+  "notes": [
+    "GitHub is source-only; no model, data, cache, asset, optimizer, video, or log payload belongs in Git.",
+    "Upload custom artifacts to ModelScope. Author release data/models may also be downloaded from their original Hugging Face repositories, but exact SHA verification remains mandatory.",
+    "The official three-task subset size includes all four hash-bound meta files plus only the 1,650 selected parquet files and 4,950 selected videos.",
+    "Do not upload all ten resume checkpoints. Only step_00018215 is useful for exact continuation."
+  ],
+  "bundles": [
+    {
+      "name": "models-runtime",
+      "priority": "P0",
+      "required_for": ["training", "evaluation"],
+      "approx_total_bytes": 24834602472,
+      "entries": [
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/fastwam_release/robotwin_uncond_3cam_384.pt",
+          "target": "checkpoints/fastwam_release/robotwin_uncond_3cam_384.pt",
+          "size_bytes": 12041813092,
+          "sha256": "776475b22566a791854ecf31cf3b50f25e7d8d94c343132ec16eb94994aa9e63"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/fastwam_release/robotwin_uncond_3cam_384_dataset_stats.json",
+          "target": "checkpoints/fastwam_release/robotwin_uncond_3cam_384_dataset_stats.json",
+          "size_bytes": 88715,
+          "sha256": "7a02c46cfc8c5e746c0afbe41fca73f723eda34cbc083f8ca54f76d8f7468095"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/DiffSynth-Studio/Wan-Series-Converted-Safetensors/models_t5_umt5-xxl-enc-bf16.safetensors",
+          "target": "checkpoints/DiffSynth-Studio/Wan-Series-Converted-Safetensors/models_t5_umt5-xxl-enc-bf16.safetensors",
+          "size_bytes": 11361845432,
+          "sha256": "d92de679881d38af9c89eff7bb1b6d6c9d96cb2b69831e4027e9ecabdd38eb23"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/DiffSynth-Studio/Wan-Series-Converted-Safetensors/Wan2.2_VAE.safetensors",
+          "target": "checkpoints/DiffSynth-Studio/Wan-Series-Converted-Safetensors/Wan2.2_VAE.safetensors",
+          "size_bytes": 1409401152,
+          "sha256": "0e913a2ca571c75fcb63385a8edadcca73454af5842596cb1ad11e4142590996"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/Wan-AI/Wan2.1-T2V-1.3B/google/umt5-xxl",
+          "target": "checkpoints/Wan-AI/Wan2.1-T2V-1.3B/google/umt5-xxl",
+          "kind": "directory",
+          "file_count": 4,
+          "size_bytes": 21454081,
+          "aggregate_sha256": "a8bc717cf013b7790af3b115681470a445fd2ac2b8e5ba750f1041f13ac54279"
+        }
+      ],
+      "excluded": [
+        "Wan2.2 diffusion_pytorch_model shards are not required because the release model path sets skip_dit_load_from_pretrain=true and strictly overlays the release checkpoint.",
+        "ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt is a Stage-1 artifact and is not required for release-base Pair-280 training/evaluation."
+      ]
+    },
+    {
+      "name": "pair280-seed1-c3-final",
+      "priority": "P0",
+      "required_for": ["evaluate_existing_pair280_c3", "archive_result"],
+      "entries": [
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/formal/checkpoint.pt",
+          "target": "pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/formal/checkpoint.pt",
+          "size_bytes": 12311364293,
+          "sha256": "1950dc6137807bcfc18fa93ac252d952f01e71426178f82f9ad6852691d7d3f5"
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/audits/formal_completion.json",
+          "target": "pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/audits/formal_completion.json",
+          "size_bytes": 10687
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/formal",
+          "target": "pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/formal_sidecars",
+          "kind": "directory_filtered",
+          "include": ["*.json", "*.csv"],
+          "exclude": ["checkpoints/**", "checkpoint.pt"]
+        }
+      ]
+    },
+    {
+      "name": "pair280-layer16-cache",
+      "priority": "P0",
+      "required_for": ["train_pair280_c1", "train_pair280_additional_seeds"],
+      "entries": [
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/shards",
+          "target": "pair280_layer16_v1/shards",
+          "kind": "directory",
+          "file_count": 180,
+          "size_bytes": 74328480036,
+          "description": "90 x safetensors plus 90 JSON shard sidecars"
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/cache_manifest.json",
+          "target": "pair280_layer16_v1/cache_manifest.json",
+          "size_bytes": 1445838,
+          "sha256": "214b44511cbd534e0c4a15c5e3811618b827210f2ad5bbe61b62ee0e504559bd"
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/pair280_state_bank.json",
+          "target": "pair280_layer16_v1/pair280_state_bank.json",
+          "size_bytes": 5684721,
+          "sha256": "d970805d489ce27a9b8b6b516d3f9c215de89940d7711e6fe2f8966627cdf710"
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/paired_text_cache",
+          "target": "pair280_layer16_v1/paired_text_cache",
+          "kind": "directory",
+          "file_count": 4,
+          "size_bytes": 3156661,
+          "aggregate_sha256": "56dff1d7f6dd05e7ac2e89570667962d8a58881cfbc416440ed5656a5cffd3df"
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/pair280_protocol.json",
+          "target": "pair280_layer16_v1/pair280_protocol.json",
+          "size_bytes": 1301,
+          "sha256": "1672a83ba64449fcb917297eb26c51aa9503730cbfe76fbd926483cb1334e2be"
+        },
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/pair280_release_binding.json",
+          "target": "pair280_layer16_v1/pair280_release_binding.json",
+          "size_bytes": 10526,
+          "sha256": "d2b17754a9537a099dcd01dce202eb2057c9aef8d01fb84c7e51dfe1bc504084"
+        }
+      ]
+    },
+    {
+      "name": "official-text-cache",
+      "priority": "P0",
+      "required_for": ["train_pair280_c1", "train_pair280_additional_seeds"],
+      "entries": [
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/stage1_artifacts/full550_three_task_text_cache",
+          "target": "FastWAM/outputs/policy_content_adapter/stage1_artifacts/full550_three_task_text_cache",
+          "kind": "directory",
+          "file_count": 68704,
+          "size_bytes": 72175819232,
+          "aggregate_payload_sha256": "c36052ebf148a46fc9ef4087c193a537167db46ec6e5085802da18478440e140"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/stage1_artifacts/full550_three_task_text_cache.audit.json",
+          "target": "FastWAM/outputs/policy_content_adapter/stage1_artifacts/full550_three_task_text_cache.audit.json",
+          "sha256": "fe2e6fa3f08083e2ec61a24d71663afc56589b38027e555d579ecb64b2bf0487"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/stage1_artifacts/full550_three_task_text_cache.inventory.json",
+          "target": "FastWAM/outputs/policy_content_adapter/stage1_artifacts/full550_three_task_text_cache.inventory.json",
+          "sha256": "159194838be14768d20a18c0a50c89320cd61441562c852a889e816edb3c9f7e"
+        }
+      ]
+    },
+    {
+      "name": "official-three-task-subset",
+      "priority": "P0",
+      "required_for": ["train_pair280_c1", "train_pair280_additional_seeds"],
+      "source_root": "/mnt/cpfs-E/baoshifeng/FastWAM/data/robotwin2.0/robotwin2.0",
+      "target_root": "data/robotwin2.0/robotwin2.0",
+      "selection": {
+        "place_a2b_left": [11000, 11549],
+        "open_microwave": [9350, 9899],
+        "move_stapler_pad": [8250, 8799]
+      },
+      "episode_count": 1650,
+      "parquet_file_count": 1650,
+      "video_file_count": 4950,
+      "meta_file_count": 4,
+      "size_bytes": 6396043464,
+      "missing_files_at_audit": 0,
+      "meta_sha256": {
+        "meta/info.json": "441a98fffe047bb642dba617bd6d89bbe313dd1379858744844536d73c493609",
+        "meta/episodes.jsonl": "7489b3636f8960d04491df4319711f6f12d38f72b8a775408a5d7af4689070b9",
+        "meta/tasks.jsonl": "ba499d6bd77debf911456d7352baa4fb91e4efc685caa6474f308a6df614b99f"
+      },
+      "original_source": "https://huggingface.co/datasets/yuanty/robotwin2.0-fastwam",
+      "warning": "Package all four original meta files unchanged. Do not rewrite global episode IDs or split metadata."
+    },
+    {
+      "name": "native50hz-paired",
+      "priority": "P0",
+      "required_for": ["train_pair280_c1", "rebuild_pair280_cache"],
+      "entries": [
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/native50hz_three_task_rgb640x480_v1/full_lerobot_v21",
+          "target": "FastWAM/outputs/policy_content_adapter/native50hz_three_task_rgb640x480_v1/full_lerobot_v21",
+          "kind": "directory",
+          "file_count": 2410,
+          "size_bytes": 4751142416,
+          "paired_action_manifest_sha256": "47c8c49b1359b2d143b88db227fe390e8cc74c5f6a430a757ee9d561be2c49ba",
+          "paired_action_audit_sha256": "8cf5439c2532e5fddb5382f7ba55d7e3619d6c70d24b766c7bfa40dc9bbcc0a2"
+        }
+      ]
+    },
+    {
+      "name": "robotwin-assets",
+      "priority": "P0_FOR_ONLINE_EVALUATION_ONLY",
+      "required_for": ["robotwin_online_rollout"],
+      "entries": [
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/third_party/RoboTwin/assets",
+          "target": "FastWAM/third_party/RoboTwin/assets",
+          "kind": "directory",
+          "file_count": 20850,
+          "size_bytes": 16611247948,
+          "repair_audit_source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/formal_c1_c3_release_v1_retry1/asset_repair_author_tree_20260820/asset_repair_audit.json",
+          "repair_audit_sha256": "09a0bad5af93f41ca5c2cfa2b5d710d55d07df29060d060501511489c0d2bcf9"
+        }
+      ]
+    },
+    {
+      "name": "provenance-small",
+      "priority": "P0",
+      "required_for": ["strict_artifact_validation", "evaluation"],
+      "entries": [
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/official_text_cache_binding_manifest.json",
+          "target": "FastWAM/outputs/policy_content_adapter/release_base_v1/official_text_cache_binding_manifest.json",
+          "sha256": "1865b317e1bc2dadc03ec2583efa1f403d4e148fca4a0a3af3ad0c13c7c22f6e"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/p_mode_dev_v1_retry1/p_mode_selection.json",
+          "target": "FastWAM/outputs/policy_content_adapter/release_base_v1/p_mode_dev_v1_retry1/p_mode_selection.json",
+          "sha256": "5c883549432c7d2450b666f8c9d2d2b0fa165bc545e9ceda9c92c9941a034ebf"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/pv2_actiondit_followup_v1/manifests",
+          "target": "FastWAM/outputs/policy_content_adapter/release_base_v1/pv2_actiondit_followup_v1/manifests",
+          "kind": "directory",
+          "description": "mechanism protocol, action initialization audit, seed53 banks, and eval amendments"
+        },
+        {
+          "source": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/formal_c1_c3_release_v1_retry1/asset_repair_author_tree_20260820/asset_repair_audit.json",
+          "target": "FastWAM/outputs/policy_content_adapter/release_base_v1/formal_c1_c3_release_v1_retry1/asset_repair_author_tree_20260820/asset_repair_audit.json",
+          "sha256": "09a0bad5af93f41ca5c2cfa2b5d710d55d07df29060d060501511489c0d2bcf9"
+        }
+      ]
+    },
+    {
+      "name": "pair280-seed1-c3-resume-step18215",
+      "priority": "P2_OPTIONAL",
+      "required_for": ["exact_resume_beyond_step_18215_only"],
+      "entries": [
+        {
+          "source": "/root/fastwam_policy_artifacts/pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/formal/checkpoints/state/step_00018215",
+          "target": "pair280_layer16_v1/seed1_c3_pair280_posttraining_v1/formal/checkpoints/state/step_00018215",
+          "kind": "directory",
+          "file_count": 13,
+          "size_bytes": 28108386591,
+          "description": "model, optimizer, policy overlay, sampler/custom state, and eight rank RNG states"
+        }
+      ],
+      "exclude": [
+        "step_00002000",
+        "step_00004000",
+        "step_00006000",
+        "step_00008000",
+        "step_00010000",
+        "step_00012000",
+        "step_00014000",
+        "step_00016000",
+        "step_00018000"
+      ]
+    }
+  ],
+  "pending_after_current_rollout": [
+    "Upload evaluation_seed53_100ep_v2 only after all six cells complete and the summary audit passes.",
+    "Do not upload or report partial rollout videos/results as a completed experiment."
+  ]
+}

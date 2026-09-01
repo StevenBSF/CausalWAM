@@ -1,0 +1,123 @@
+schema_version: 2
+kind: policy_content_adapter_run
+experiment_id: formal_clean_random
+stage: formal
+formal: true
+control: c1_architecture_only
+setting: Clean+Random
+execution:
+  runner: policy_content_adapter
+  runnable: false
+  fail_closed: true
+  long_formal_training: true
+  blocked_reason: Replace every required placeholder, pass config/data audits, then explicitly set runnable=true and fail_closed=false.
+protocol:
+  matched_pair: clean_random_pair
+  comparison_role: baseline
+  only_intended_pair_difference: paired_intervention_contrastive_supervision
+  action_distribution: official_clean_plus_random
+  seeds: [0, 1, 2]
+tasks: [place_a2b_left, open_microwave, move_stapler_pad]
+output_dir: outputs/policy_content_adapter/formal_clean_random
+base_checkpoint: __REQUIRED_CLEAN_RANDOM_CHECKPOINT__
+model_base_path: /mnt/cpfs-E/baoshifeng/FastWAM/checkpoints
+artifacts:
+  base_checkpoint_sha256: __REQUIRED_CLEAN_RANDOM_CHECKPOINT_SHA256__
+  dataset_stats_sha256: __REQUIRED_CLEAN_RANDOM_DATASET_STATS_SHA256__
+  head_init_sha256: e42c5af1b50023c8cea1a17c8b9269038518c83533e94c54cf2a939092f6ae97
+  paired_cache_sha256: 91f02fcc3490e3c64904585d89b64cf26684f26a1e6374ee7fc1f184b98b6026
+  official_task_manifest_sha256: __REQUIRED_CLEAN_RANDOM_TASK_MANIFEST_SHA256__
+
+policy:
+  enabled: true
+  regime: __SELECT_P_V1_OR_P_V2_AFTER_SMOKE__
+  adapter_init_seed: __REQUIRED_MATCHED_ADAPTER_INIT_SEED__
+  content_layer: 16
+  input_token_count: 120
+  input_dim: 3072
+  queries: 8
+  content_dim: 384
+  attention_heads: 8
+  adapter_count: 1
+  action_hidden_dim: 1024
+  gate_init_exact: 0.0
+  head_init: outputs/e2_e3/full/e2/e2_best_content_head.pt
+  freeze:
+    vae: true
+    video_backbone: true
+    action_dit: __SELECT_MATCHED_ACTION_DIT_FREEZE_AFTER_SMOKE__
+    content_head: false
+    action_adapter: false
+architecture:
+  content_head: true
+  gated_action_adapter: true
+  adapter_injection: action_encoder_output
+  adapter_residual: Xa_plus_tanh_gate_cross_attention
+  mean_pool_on_policy_path: false
+
+official:
+  enabled: true
+  dataset_root: __REQUIRED_OFFICIAL_CLEAN_RANDOM_DATASET_ROOT__
+  dataset_stats: __REQUIRED_CLEAN_RANDOM_DATASET_STATS_JSON__
+  canonical_task_manifest: __REQUIRED_CLEAN_RANDOM_TASK_MANIFEST_JSON__
+  strict_task_subset: true
+  sampling_mode: all_frames
+  task_balanced: true
+  balanced_tasks: true
+  text_cache_dir: __REQUIRED_CLEAN_RANDOM_TEXT_CACHE_DIR__
+  on_the_fly_text_smoke: false
+  action_supervision: true
+  domain_label: official_clean_plus_random
+  domain_verified: __REQUIRED_DOMAIN_VERIFICATION_BOOL__
+  domain_evidence: __REQUIRED_CLEAN_RANDOM_DOMAIN_EVIDENCE_JSON__
+
+paired:
+  enabled: false
+  cache: outputs/e2_e3/full/cache/e2_train.pt
+  split: train
+  layer: 16
+  token_count: 120
+  token_dim: 3072
+  variants: [clean, style_00_seed_0, style_01_seed_1]
+  same_physical_state_positives: true
+  same_task_state_negatives: true
+  action_supervision: false
+  r3_excluded: true
+
+supervision:
+  streams: official_only
+  concatenate_datasets: false
+  official_action: true
+  paired_action: false
+  paired_contrastive: false
+  video_loss: false
+loss:
+  action: native_flow_matching_mse
+  video: null
+  contrastive: multi_positive_supcon
+  temperature: 0.07
+  lambda_contrastive: 0.0
+optimizer:
+  name: adamw
+  trainable_parameter_dtype: fp32
+  head_adapter_lr: 1.0e-4
+  action_dit_lr: 1.0e-5
+  weight_decay: 0.0
+  betas: [0.9, 0.95]
+training:
+  seed: __REQUIRED_ONE_OF_PROTOCOL_SEEDS__
+  max_steps: __REQUIRED_CLEAN_RANDOM_PAIR_MATCHED_CONTINUATION_STEPS__
+  official_batch_size: __REQUIRED_CLEAN_RANDOM_PAIR_MATCHED_OFFICIAL_BATCH_SIZE__
+  paired_groups_per_batch: __REQUIRED_MATCHED_PAIRED_GROUPS_PER_BATCH__
+  num_workers: __REQUIRED_MATCHED_NUM_WORKERS__
+  mixed_precision: bf16
+  model_dtype: bf16
+  max_grad_norm: 1.0
+  save_optimizer: true
+  require_cuda: true
+evaluation:
+  tasks: [place_a2b_left, open_microwave, move_stapler_pad]
+  required_domains: [clean, official_random]
+  r3_background_only: if_supported
+  rollout_protocol_id: __REQUIRED_MATCHED_ROLLOUT_PROTOCOL_ID__
+  episodes_per_task: __REQUIRED_MATCHED_FORMAL_EPISODES_PER_TASK__

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "policy_author_release_base_lineage",
+  "status": "PASS",
+  "lineage_id": "fastwam_robotwin_50task_clean_random_author_release_v1",
+  "base_kind": "author_release",
+  "checkpoint": {
+    "path": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/fastwam_release/robotwin_uncond_3cam_384.pt",
+    "size_bytes": 12041813092,
+    "sha256": "776475b22566a791854ecf31cf3b50f25e7d8d94c343132ec16eb94994aa9e63"
+  },
+  "dataset_stats": {
+    "path": "/mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/fastwam_release/robotwin_uncond_3cam_384_dataset_stats.json",
+    "size_bytes": 88715,
+    "sha256": "7a02c46cfc8c5e746c0afbe41fca73f723eda34cbc083f8ca54f76d8f7468095"
+  },
+  "official_partition": {
+    "task_count": 50,
+    "episodes_per_task": 550,
+    "clean_per_task": 50,
+    "random_per_task": 500,
+    "total_episodes": 27500,
+    "partition_rule": "first_50_clean_next_500_official_random",
+    "domain_rule_scope": "hash_bound_protocol_partition_not_checkpoint_payload",
+    "manifest": {
+      "path": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/experiments/robotwin/policy_content_adapter/configs/official_three_task_manifest.json",
+      "size_bytes": 3704,
+      "sha256": "15f1d60e6f662f047385069ec1afe4715f69aeb3137419f9b4f37a811ec55126"
+    }
+  },
+  "source": {
+    "repository": "https://github.com/yuantianyuan01/FastWAM",
+    "revision": "45d8e1458921d83f8ad6cf9ce993d371208dabd0",
+    "release_model_id": "yuanty/fastwam:robotwin_uncond_3cam_384.pt",
+    "checkpoint_url": "https://huggingface.co/yuanty/fastwam",
+    "dataset_url": "https://huggingface.co/datasets/yuanty/robotwin2.0-fastwam",
+    "evidence_files": {
+      "readme": {
+        "path": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/README.md",
+        "size_bytes": 10871,
+        "sha256": "2ca33817262a9210152070268d041aecf54f62cabe442b0ea62dd15c5d9983ff"
+      },
+      "task_config": {
+        "path": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/configs/task/robotwin_uncond_3cam_384_1e-4.yaml",
+        "size_bytes": 401,
+        "sha256": "2f78a207415b452b05e0238f3e00eb9942d7960413076b5b3cdcf1ce09caef9f"
+      },
+      "data_config": {
+        "path": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/configs/data/robotwin.yaml",
+        "size_bytes": 4110,
+        "sha256": "f1ba509fac21fc59d5a210d6f68bcf94640729ce00dce695b7ca6df24c7b5aa7"
+      },
+      "evaluation_config": {
+        "path": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/configs/sim_robotwin.yaml",
+        "size_bytes": 975,
+        "sha256": "b96b579a8f243c935f1e17f8f3d6e9b7cb6bf2f2a6823272f626ecc33d68056f"
+      }
+    }
+  },
+  "model_contract": {
+    "task_config": "robotwin_uncond_3cam_384_1e-4",
+    "camera_names": [
+      "cam_high",
+      "cam_left_wrist",
+      "cam_right_wrist"
+    ],
+    "raw_camera_shape_chw": [3, 480, 640],
+    "transformed_camera_shape_chw": [3, 240, 320],
+    "final_video_size_hw": [384, 320],
+    "action_steps": 32,
+    "action_dim": 14,
+    "state_dim": 14,
+    "normalization": "z-score",
+    "stepwise_action_normalization": false,
+    "checkpoint_load_contract": {
+      "loader": "strict_load_release_checkpoint",
+      "mot_strict": true,
+      "proprio_encoder_strict": true,
+      "expected_missing_keys": 0,
+      "expected_unexpected_keys": 0
+    }
+  }
+}

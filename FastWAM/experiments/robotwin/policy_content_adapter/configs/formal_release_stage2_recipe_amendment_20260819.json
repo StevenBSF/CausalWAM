@@ -1,0 +1,101 @@
+{
+  "kind": "policy_release_stage2_recipe_amendment",
+  "schema_version": 2,
+  "status": "PASS",
+  "created_date_utc": "2026-08-19",
+  "revised_date_utc": "2026-08-19",
+  "scope": "release-base primary C1/C3 formal runs only",
+  "disclosure": {
+    "deviation": "The original prose required formal Stage-2 max_steps and batch ratios to be locked before P-mode dev rollout, but no numeric formal recipe artifact existed at that time.",
+    "non_retroactive_claim": "This amendment does not claim that the formal recipe was locked before the completed P-mode selection.",
+    "selection_isolation": "P-mode selection compared P-v1 and P-v2 at the same 100-step C1/lambda-zero dev recipe and did not use C3 evidence.",
+    "formal_recipe_rationale": "The formal step count is derived from the pre-existing 720-state paired training inventory and the sampler contract, not from C3 or final-test outcomes."
+  },
+  "locked_recipe": {
+    "selected_policy_regime": "p_v1",
+    "stage2_training_seeds": [1, 2, 3],
+    "max_steps": 1800,
+    "official_batch_size_per_rank": 1,
+    "paired_groups_per_batch_per_rank": 2,
+    "world_size": 1,
+    "gradient_accumulation_steps": 1,
+    "effective_official_global_batch": 1,
+    "effective_paired_groups_per_step": 2,
+    "head_adapter_lr": 0.0001,
+    "action_dit_lr_inactive_under_p_v1": 0.00001,
+    "lr_scheduler": "constant",
+    "lambda_contrastive": {
+      "c1_architecture_only": 0.0,
+      "c3_ours": 0.1
+    },
+    "temperature": 0.07,
+    "optimizer": "adamw",
+    "weight_decay": 0.0,
+    "betas": [0.9, 0.95],
+    "mixed_precision": "bf16",
+    "trainable_parameter_dtype": "fp32"
+  },
+  "exposure_accounting": {
+    "paired_physical_state_groups": 720,
+    "paired_group_draws": 3600,
+    "paired_exposure_equivalent_passes": 5.0,
+    "sampler_semantics": "same-task balanced round-robin batches with within-batch distinct states and across-step sampling with replacement",
+    "expected_unique_state_coverage_fraction": 0.993262,
+    "terminology_guard": "This is five exposure-equivalent passes, not five strict without-replacement epochs.",
+    "official_frames_drawn_total": 1800,
+    "official_frames_drawn_per_task": 600,
+    "official_terminology_guard": "The formal Stage-2 run does not constitute one full pass over all 466240 official frames."
+  },
+  "runtime_incident_correction": {
+    "timing": "Recorded after the first formal launch failed and before any formal checkpoint, online rollout, or scientific result existed.",
+    "failed_output_root": "/mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/formal_c1_c3_release_v1",
+    "failed_status_sha256": "789f390f07dfd4a973287f59f1818e1ba52f9dda6cffb78914781692388e80c3",
+    "completed_optimizer_steps_before_failure": {
+      "seed_1_c1": 17,
+      "seed_1_c3": 17,
+      "seed_2_c1": 16,
+      "seed_2_c3": 16,
+      "seed_3_c1": 15,
+      "seed_3_c3": 15
+    },
+    "formal_checkpoints_created": 0,
+    "online_rollouts_started": false,
+    "root_cause": "The native Wan continuous scheduler legitimately produces exact-zero endpoint weights after BF16 timestep quantization, but the experiment audit incorrectly required a positive action-path gradient on every step.",
+    "failed_log_sha256": {
+      "seed_1_c1": "436be516a7a3b462236715fbbc4ef0726d41686f0467256d08454a7b6897c9dc",
+      "seed_1_c3": "764c3f7c3cbe19f007d7b49d03baea78ef4bfa991bbba6c2e03585b78300c56e",
+      "seed_2_c1": "3571b6c2d90c13fc6500442007d9ce8da974b6e7e7949160eefad58c938a67d6",
+      "seed_2_c3": "d8e95a7948b026f8f87ec4091ef89d1b54828a396a4571e2ae126f1d48f6c1d6",
+      "seed_3_c1": "86c54c04c02c594cd48b0ca1bd723ffdddfa22f9c0fe41dec70e0aac99b8babb",
+      "seed_3_c3": "45378bf4ed8a9836d8b2935faa42a02768c440e2e6530deaa2d2bb64fa86c328"
+    },
+    "audit_semantics_correction": {
+      "positive_weight_batch": "Retain the strict nonzero Gate/Head/GCA/Zc action-path checks.",
+      "zero_weight_batch": "Require zero weighted action loss and exactly zero action-only gradients, while retaining finite/frozen-component checks.",
+      "all_padding": "Reject any official sample with no valid action target; it cannot be classified as a scheduler endpoint.",
+      "run_level": "Require at least two positive-weight batches and audit all 1800 gradient rows after training.",
+      "loss_formula_changed": false,
+      "scheduler_weight_clamped_or_skipped": false,
+      "optimizer_step_skipped": false
+    },
+    "rng_stream_correction": {
+      "old_policy": "training_seed + zero_based_step_index, which made adjacent replication seeds shifted overlapping streams",
+      "new_policy_id": "stage2_mixed_radix_no_collision_v1",
+      "new_mapping": "(((training_seed * 1024 + process_index) * 2 + stream_id) * 1000000 + zero_based_step_index)",
+      "cross_seed_collision_free_for_formal_range": true,
+      "same_seed_c1_c3_exactly_paired": true,
+      "training_seed_labels_unchanged": [1, 2, 3]
+    },
+    "bound_runtime_source_sha256": {
+      "experiments/robotwin/policy_content_adapter/train.py": "61576abf3f19c7092184c756de08c537ffaa9df310f3a60a8034dcea78732e71",
+      "experiments/robotwin/policy_content_adapter/losses.py": "e32636b4647d6e229ec6786f8041cd484feb6499f5a6f0cbc98792dea0664cf7",
+      "experiments/robotwin/policy_content_adapter/release_formal_c1c3_audit.py": "e47a186da85c27c04a66fa638d5ec0d07c99646d8c7d913dcaa9a53e64758f3b",
+      "experiments/robotwin/policy_content_adapter/training_audit.py": "812e73c6e816324b88d5886f614787c4f8191a4aa97de0e9104b5d5ab9be217a"
+    }
+  },
+  "prohibitions": [
+    "Do not change this recipe using C3 or final-test outcomes.",
+    "Do not describe 1800 steps as a full official-data epoch.",
+    "Do not reinterpret the completed 100-step P-mode pilot as formal C1 training."
+  ]
+}

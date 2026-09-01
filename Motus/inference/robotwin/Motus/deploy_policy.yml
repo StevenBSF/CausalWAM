@@ -1,0 +1,11 @@
+# Basic experiment configuration (keep unchanged)
+policy_name: null
+task_name: null
+task_config: null
+ckpt_setting: null
+adapter_checkpoint_path: null
+seed: null
+instruction_type: unseen
+
+# LAWM Parameters
+model_config: robotwin.yml

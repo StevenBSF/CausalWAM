@@ -1,0 +1,155 @@
+schema_version: 3
+kind: policy_content_adapter_run
+experiment_id: p_v1_three_task_online_dev_pilot_v2
+stage: dev_pilot
+formal: false
+control: p_v1
+selection_role: c1_lambda0
+execution:
+  runner: policy_content_adapter
+  runnable: false
+  fail_closed: true
+  long_formal_training: false
+  blocked_reason: Bind the author-release lineage, matched C1/lambda-zero pilot artifacts, and the locked dev-selection seed bank before launching.
+tasks: [place_a2b_left, open_microwave, move_stapler_pad]
+output_dir: outputs/policy_content_adapter/v2/p_v1_dev_pilot
+base_checkpoint: /mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/fastwam_release/robotwin_uncond_3cam_384.pt
+model_base_path: /mnt/cpfs-E/baoshifeng/FastWAM/checkpoints
+base_lineage_manifest: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/experiments/robotwin/policy_content_adapter/configs/author_release_base_manifest.json
+release_paired_binding_manifest: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/release_base_v1/paired_binding_manifest.json
+p_mode_selection_manifest: null
+artifacts:
+  base_checkpoint_sha256: 776475b22566a791854ecf31cf3b50f25e7d8d94c343132ec16eb94994aa9e63
+  dataset_stats_sha256: 7a02c46cfc8c5e746c0afbe41fca73f723eda34cbc083f8ca54f76d8f7468095
+  official_task_manifest_sha256: 15f1d60e6f662f047385069ec1afe4715f69aeb3137419f9b4f37a811ec55126
+  base_lineage_manifest_sha256: d90e6d545c04c28e9e73b6b8a9356ec5e9320be4be6f6b7e3b69237a3f38cefc
+  release_paired_binding_manifest_sha256: ab2904a01636fdb6fd80798a65580cc58c07451fc30ebcd5a527161c56025835
+  head_init_sha256: null
+  paired_action_manifest_sha256: 47c8c49b1359b2d143b88db227fe390e8cc74c5f6a430a757ee9d561be2c49ba
+  paired_state_bank_sha256: 140397968f13dba0870915baf7337f1a8f06943b719425f56f2815efed25dccd
+  paired_text_cache_sha256: __REQUIRED_PAIRED_TEXT_CACHE_SHA256__
+  paired_cache_sha256: __REQUIRED_POLICY_FOUR_SCENE_CACHE_SHA256__
+  p_mode_selection_manifest_sha256: null
+  simulator_seed_bank_manifest_sha256: __REQUIRED_DEV_SELECTION_SEED_BANK_MANIFEST_SHA256__
+policy:
+  enabled: true
+  regime: p_v1
+  head_init_mode: random
+  head_init_seed: __REQUIRED_MATCHED_DEV_PILOT_SEED__
+  adapter_init_seed: __REQUIRED_MATCHED_DEV_PILOT_SEED__
+  content_layer: 16
+  input_token_count: 120
+  input_dim: 3072
+  queries: 8
+  content_dim: 384
+  attention_heads: 8
+  adapter_count: 1
+  action_hidden_dim: 1024
+  gate_init_exact: 0.0
+  head_init: null
+  freeze:
+    vae: true
+    video_backbone: true
+    action_dit: true
+    content_head: false
+    action_adapter: false
+architecture:
+  content_head: true
+  gated_action_adapter: true
+  adapter_injection: action_encoder_output
+  adapter_residual: Xa_plus_tanh_gate_cross_attention
+  mean_pool_on_policy_path: false
+official:
+  enabled: true
+  dataset_root: /mnt/cpfs-E/baoshifeng/FastWAM/data/robotwin2.0/robotwin2.0
+  dataset_stats: /mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/fastwam_release/robotwin_uncond_3cam_384_dataset_stats.json
+  canonical_task_manifest: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/experiments/robotwin/policy_content_adapter/configs/official_three_task_manifest.json
+  selection_mode: full_550_per_task
+  expected_clean_per_task: 50
+  expected_random_per_task: 500
+  expected_total_per_task: 550
+  strict_task_subset: true
+  sampling_mode: all_frames
+  task_balanced: true
+  balanced_tasks: true
+  text_cache_dir: __REQUIRED_OFFICIAL_TEXT_CACHE_DIR__
+  on_the_fly_text_smoke: false
+  action_supervision: true
+  domain_label: official_clean_plus_random
+  domain_verified: true
+  domain_evidence: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/experiments/robotwin/policy_content_adapter/configs/author_release_base_manifest.json
+paired:
+  enabled: true
+  protocol_id: policy_native50hz_four_scene_v1
+  supervision_mode: contrastive
+  action_root: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/native50hz_three_task_rgb640x480_v1/full_lerobot_v21
+  action_manifest: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/native50hz_three_task_rgb640x480_v1/full_lerobot_v21/meta/policy_native_action_manifest.json
+  action_audit: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/native50hz_three_task_rgb640x480_v1/full_lerobot_v21/meta/policy_native_action_audit.json
+  state_bank: /mnt/cpfs-E/baoshifeng/CausalWAM/FastWAM/outputs/policy_content_adapter/native50hz_three_task_rgb640x480_v1/full_lerobot_v21/meta/policy_paired_state_bank.json
+  text_cache_dir: __REQUIRED_PAIRED_TEXT_CACHE_DIR__
+  cache: __REQUIRED_POLICY_FOUR_SCENE_TRAIN_CACHE__
+  split: train
+  layer: 16
+  token_count: 120
+  token_dim: 3072
+  variants: [clean, style_00_seed_0, style_01_seed_1, style_02_seed_2]
+  view_count: 4
+  r3_role: training_positive
+  camera_names: [cam_high, cam_left_wrist, cam_right_wrist]
+  camera_count: 3
+  native_fps: 50
+  action_steps: 32
+  action_dim: 14
+  temporal_resampling: none
+  native_action_targets: true
+  same_physical_state_positives: true
+  same_task_state_negatives: true
+  action_supervision: false
+  contrastive_supervision: false
+supervision:
+  streams: dual_independent
+  concatenate_datasets: false
+  official_action: true
+  paired_action: false
+  paired_contrastive: false
+  video_loss: false
+loss:
+  action: native_flow_matching_mse
+  video: null
+  contrastive: multi_positive_supcon
+  temperature: 0.07
+  lambda_paired_action: 0.0
+  lambda_contrastive: 0.0
+optimizer:
+  name: adamw
+  lr_scheduler: constant
+  trainable_parameter_dtype: fp32
+  head_adapter_lr: 1.0e-4
+  action_dit_lr: 1.0e-5
+  weight_decay: 0.0
+  betas: [0.9, 0.95]
+training:
+  seed: __REQUIRED_MATCHED_DEV_PILOT_SEED__
+  max_steps: __REQUIRED_MATCHED_DEV_PILOT_STEPS__
+  official_batch_size: __REQUIRED_MATCHED_OFFICIAL_BATCH_SIZE__
+  paired_groups_per_batch: __REQUIRED_MATCHED_PAIRED_GROUPS_PER_BATCH__
+  world_size: __REQUIRED_MATCHED_WORLD_SIZE__
+  gradient_accumulation_steps: 1
+  effective_official_global_batch: __REQUIRED_MATCHED_OFFICIAL_GLOBAL_BATCH__
+  effective_paired_groups_per_step: __REQUIRED_MATCHED_PAIRED_GLOBAL_GROUPS__
+  num_workers: 4
+  mixed_precision: bf16
+  model_dtype: bf16
+  max_grad_norm: 1.0
+  save_optimizer: true
+  require_cuda: true
+  separate_stream_rng: true
+  preserve_official_sequence_across_controls: true
+evaluation:
+  tasks: [place_a2b_left, open_microwave, move_stapler_pad]
+  required_domains: [clean, official_random]
+  rollout_protocol_id: three_task_policy_online_v2
+  simulator_seed_bank_manifest: __REQUIRED_DEV_SELECTION_SEED_BANK_MANIFEST_JSON__
+  simulator_seed_bank_id: __REQUIRED_DEV_SELECTION_SEED_BANK_ID__
+  simulator_seed_bank_purpose: dev_selection
+  episodes_per_task: 20

@@ -1,0 +1,59 @@
+# Policy Protocol v2: one planned physical trajectory, four deterministic
+# scene replays, native 250 Hz -> 50 Hz sampling by keeping every fifth
+# physics state.  The collection wrapper audits this file before importing
+# SAPIEN and installs a global physics-step sampler; interpolation is forbidden.
+render_freq: 0
+episode_num: 50
+use_seed: false
+timestep: 0.004
+save_freq: 5
+embodiment:
+  - aloha-agilex
+language_num: 0
+domain_randomization:
+  random_background: false
+  cluttered_table: false
+  clean_background_rate: 0
+  random_head_camera_dis: 0
+  random_table_height: 0
+  random_light: false
+  crazy_random_light_rate: 0
+  random_embodiment: false
+camera:
+  head_camera_type: Large_D435
+  wrist_camera_type: Large_D435
+  collect_head_camera: true
+  collect_wrist_camera: true
+data_type:
+  rgb: true
+  third_view: false
+  depth: false
+  pointcloud: false
+  observer: false
+  endpose: true
+  qpos: true
+  true_qpos: true
+  true_qvel: true
+  mesh_segmentation: false
+  actor_segmentation: false
+pcd_down_sample_num: 1024
+pcd_crop: true
+save_path: ./data/place_a2b_left/policy_native50hz_paired_rgb640x480_v1/raw
+clear_cache_freq: 1
+collect_data: true
+eval_video_log: false
+policy_native50hz_contract:
+  physics_hz: 250
+  sample_every_physics_steps: 5
+  fps: 50
+  timestamp_delta_seconds: 0.02
+  action_horizon: 32
+  action_dim: 14
+  scene_variants:
+    - C
+    - R1
+    - R2
+    - R3
+  interpolation: forbidden
+  camera_type: Large_D435
+  image_shape_hwc: [480, 640, 3]

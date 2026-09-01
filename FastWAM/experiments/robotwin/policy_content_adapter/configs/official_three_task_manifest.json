@@ -1,0 +1,110 @@
+{
+  "schema_version": 2,
+  "manifest_id": "fastwam_robotwin2_release_three_task_v2",
+  "dataset": {
+    "name": "FastWAM RoboTwin2.0 release policy dataset",
+    "facts": {
+      "codebase_version": "v2.1",
+      "total_episodes": 27500,
+      "total_frames": 6075103,
+      "total_tasks": 921032,
+      "total_videos": 82500,
+      "fps": 50
+    },
+    "meta_files": {
+      "meta/info.json": {
+        "size_bytes": 4601,
+        "sha256": "441a98fffe047bb642dba617bd6d89bbe313dd1379858744844536d73c493609"
+      },
+      "meta/episodes.jsonl": {
+        "size_bytes": 200586956,
+        "sha256": "7489b3636f8960d04491df4319711f6f12d38f72b8a775408a5d7af4689070b9"
+      },
+      "meta/tasks.jsonl": {
+        "size_bytes": 130765390,
+        "sha256": "ba499d6bd77debf911456d7352baa4fb91e4efc685caa6474f308a6df614b99f"
+      }
+    }
+  },
+  "task_order": [
+    "place_a2b_left",
+    "open_microwave",
+    "move_stapler_pad"
+  ],
+  "tasks": {
+    "place_a2b_left": {
+      "episode_start": 11000,
+      "episode_end_inclusive": 11549,
+      "episode_count": 550,
+      "domains": {
+        "clean": {
+          "episode_start": 11000,
+          "episode_end_inclusive": 11049,
+          "episode_count": 50
+        },
+        "official_random": {
+          "episode_start": 11050,
+          "episode_end_inclusive": 11549,
+          "episode_count": 500
+        }
+      },
+      "range_evidence": "The hash-bound episode prompt block expresses placing object A to the left of object B; episode 11550 begins the right-relation block."
+    },
+    "open_microwave": {
+      "episode_start": 9350,
+      "episode_end_inclusive": 9899,
+      "episode_count": 550,
+      "domains": {
+        "clean": {
+          "episode_start": 9350,
+          "episode_end_inclusive": 9399,
+          "episode_count": 50
+        },
+        "official_random": {
+          "episode_start": 9400,
+          "episode_end_inclusive": 9899,
+          "episode_count": 500
+        }
+      },
+      "range_evidence": "The hash-bound episode prompt block consistently expresses opening the microwave."
+    },
+    "move_stapler_pad": {
+      "episode_start": 8250,
+      "episode_end_inclusive": 8799,
+      "episode_count": 550,
+      "domains": {
+        "clean": {
+          "episode_start": 8250,
+          "episode_end_inclusive": 8299,
+          "episode_count": 50
+        },
+        "official_random": {
+          "episode_start": 8300,
+          "episode_end_inclusive": 8799,
+          "episode_count": 500
+        }
+      },
+      "range_evidence": "The hash-bound episode prompt block consistently expresses moving a stapler onto a mat/pad."
+    }
+  },
+  "domain": {
+    "label": "protocol_v2_hash_bound_range_partition",
+    "verified": true,
+    "verification_scope": "episode_index_ranges_in_hash_bound_release",
+    "intrinsic_metadata_domain_field": false,
+    "note": "Protocol v2 defines the first 50 episodes of each hash-bound 550-episode task block as Clean and the following 500 as Official Random. The release metadata has no intrinsic domain field; this claim is scoped only to these exact metadata hashes and episode ranges."
+  },
+  "selection_contract": {
+    "selection_modes": {
+      "native_99pct": "Legacy compatibility mode: reproduce FastWAM's seed-42 global 99/1 episode split and intersect it with the three task blocks.",
+      "full_550_per_task": "Stage1 protocol mode: disable the native validation split and load exactly 50 Clean + 500 Official Random episodes for each task."
+    },
+    "outer_get_only": true,
+    "random_fallback_forbidden": true,
+    "sampling_modes": [
+      "all_frames",
+      "episode_anchor"
+    ],
+    "episode_anchor": "lower midpoint frame of each episode"
+  }
+}

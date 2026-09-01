@@ -1,0 +1,42 @@
+{
+  "status": "LOCKED",
+  "kind": "policy_formal_seed_plan_amendment",
+  "schema_version": 1,
+  "protocol_id": "policy_protocol_v2_stage1_b_cr",
+  "recorded_at_utc": "2026-08-18T16:07:15Z",
+  "changed_field": "original_fastwam.training.formal_replication_seeds",
+  "old_formal_replication_seeds": [0, 1, 2],
+  "new_formal_replication_seeds": [1, 2, 3],
+  "reason": "Preserve the original FastWAM positive-integer seed contract; its seed helper rejects zero.",
+  "decision_timing": "Before any successful Stage1 optimizer step or parameter update.",
+  "result_dependent_selection": false,
+  "old_stage1_config": {
+    "path": "experiments/robotwin/policy_content_adapter/configs/stage1_clean_random_base_seeds012_legacy.yaml",
+    "sha256": "bc64d65922e44068b772546e0613c23e726d479f85faa394a580d7a2746c8f9c"
+  },
+  "new_stage1_config": {
+    "path": "experiments/robotwin/policy_content_adapter/configs/stage1_clean_random_base.yaml",
+    "sha256": "c80366d7c52d9ee0fe4a406c34b62239678761bc240ccd3d2cb826073e62fa88"
+  },
+  "text_cache_reuse": {
+    "content_depends_on_training_seed": false,
+    "payloads_regenerated": false,
+    "existing_audit_sha256": "fe2e6fa3f08083e2ec61a24d71663afc56589b38027e555d579ecb64b2bf0487",
+    "existing_inventory_sha256": "159194838be14768d20a18c0a50c89320cd61441562c852a889e816edb3c9f7e",
+    "aggregate_payload_sha256": "c36052ebf148a46fc9ef4087c193a537167db46ec6e5085802da18478440e140",
+    "compatibility_rule": "Parsed old and new Stage1 YAML must differ only at changed_field; runtime still validates all 68704 payloads."
+  },
+  "failed_seed0_engineering_attempt": {
+    "output_directory": "outputs/policy_content_adapter/stage1_clean_random_base_seed0",
+    "completed_optimizer_steps": 0,
+    "parameter_updates": 0,
+    "checkpoint_present": false,
+    "completion_manifest_present": false,
+    "failure": "Original FastWAM set_global_seed asserts 0 < seed.",
+    "artifacts": {
+      ".stage1_launch_authorized.json": "fcc0351b42dffd2b3ebb7d816689895b118a9632be6f311f3254a8c476ad78a6",
+      "config.yaml": "1101d378d3c85228323938445ce4ba238b482de46d2dcbdecb83e013f3b94bac",
+      "stage1_protocol_audit.json": "633b8a408b031c6cf544c5f6fcbc59e88c290b33297a49e824a891d2eb821931"
+    }
+  }
+}

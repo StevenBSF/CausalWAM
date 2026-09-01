@@ -1,0 +1,39 @@
+# RoboTwin policy module exposed through the independent policy symlink.
+policy_name: policy_content_adapter.rollout_policy
+task_name: null
+task_config: null
+ckpt_setting: null
+seed: 0
+instruction_type: unseen
+eval_num_episodes: 100
+
+# Native FastWAM rollout arguments.  ``ckpt_setting`` is a compact policy
+# checkpoint; rollout_policy.py verifies/loads its referenced base checkpoint.
+sim_cfg_path: null
+sim_task: null
+sim_cfg_name: sim_robotwin.yaml
+mixed_precision: bf16
+device: cuda
+dataset_stats_path: null
+action_horizon: null
+replan_steps: 24
+num_inference_steps: 10
+sigma_shift: null
+text_cfg_scale: 1.0
+negative_prompt: ""
+rand_device: cpu
+tiled: false
+timing_enabled: false
+skip_get_obs_within_replan: true
+
+# Experiment-owned strict final-evaluation extension.  These remain null for
+# engineering/dev evaluation.  ``formal_episode_mode=realize`` performs the
+# policy-independent exact-seed pass; ``replay`` consumes the resulting bank
+# and writes a per-episode success trace.  RoboTwin's vendored evaluator is not
+# modified.
+formal_episode_mode: null
+formal_candidate_seed_bank: null
+formal_protocol_lock: null
+formal_episode_cell_output: null
+formal_episode_realization_bank: null
+formal_episode_trace_output: null

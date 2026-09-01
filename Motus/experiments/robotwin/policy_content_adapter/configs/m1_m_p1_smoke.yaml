@@ -1,0 +1,74 @@
+schema: motus_policy_content_adapter_run_config
+schema_version: 1
+protocol_id: motus_policy_content_adapter_v1
+config_id: motus_m1_mp1_smoke_v1
+runnable: false
+fail_closed_reason: "Motus_robotwin2 lineage, strict-load audit, task text cache and frozen WAN token cache are pending"
+control: m1_architecture_action_control
+model:
+  regime: m_p1
+  freeze:
+    wan: true
+    vae: true
+    vlm: true
+    understanding_expert: true
+    action_expert: true
+    content_head_gca: false
+  adapter:
+    capture_branch: current_observation_frozen_video_only_wan_t0
+    capture_layer: 16
+    backbone_dim: 3072
+    content_queries: 8
+    content_dim: 384
+    content_heads: 8
+    action_dim: 1024
+    action_heads: 8
+    zero_gate: true
+objective:
+  official_loss: action_flow_matching_only
+  paired_loss: same_task_four_view_supcon_only
+  lambda_contrastive: 0.0
+  temperature: 0.07
+data:
+  tasks: [place_a2b_left, open_microwave, move_stapler_pad]
+  official:
+    episodes: 1650
+    virtual_samples_per_epoch: 16500
+    action_chunk: 16
+    action_hz: 10
+    interpolation: false
+    action_values: raw_joint_action_vector
+  paired:
+    physical_states: 720
+    views_per_state: 4
+    action_supervision: false
+training:
+  seed: 1
+  world_size: 8
+  per_device_batch: 1
+  paired_groups_per_device: 2
+  gradient_accumulation_steps: 1
+  global_batch: 8
+  max_steps: 3
+  checkpoint_interval: 2
+  head_adapter_lr: 1.0e-4
+  action_expert_lr: null
+  weight_decay: 0.01
+  grad_clip_norm: 0.5
+  mixed_precision: bf16
+  scheduler: constant
+  num_workers: 0
+  sequence_contract:
+    official_rng_stream: official
+    paired_rng_stream: paired
+    matched_m1_m3: true
+artifacts:
+  base_lineage_manifest: {path: __PENDING_BASE_LINEAGE__, size_bytes: -1, sha256: __PENDING__}
+  implementation_audit: {path: __PENDING_IMPLEMENTATION_AUDIT__, size_bytes: -1, sha256: __PENDING__}
+  strict_load_audit: {path: __PENDING_STRICT_LOAD__, size_bytes: -1, sha256: __PENDING__}
+  zero_gate_audit: {path: __PENDING_ZERO_GATE__, size_bytes: -1, sha256: __PENDING__}
+  official_manifest: {path: /mnt/cpfs-E/baoshifeng/CausalWAM/Motus/outputs/policy_content_adapter/motus_v1/official_three_task_manifest_v4.json, size_bytes: 1776313, sha256: f666e9a58c5b41202e429cf36d4eb72ba0348d8eaff35933dc1f44bbd33ddc54}
+  paired_manifest: {path: /mnt/cpfs-E/baoshifeng/CausalWAM/Motus/outputs/policy_content_adapter/motus_v1/paired_observation_manifest.json, size_bytes: 3113543, sha256: 2a070dde748dd603a5d81338d302a983953ed3c5f3ff79106ded2e10cb39fe95}
+  frozen_token_cache: {path: __PENDING_TOKEN_CACHE__, size_bytes: -1, sha256: __PENDING__}
+  task_text_cache: {path: __PENDING_TEXT_CACHE__, size_bytes: -1, sha256: __PENDING__}
+output_dir: /mnt/cpfs-E/baoshifeng/CausalWAM/Motus/outputs/policy_content_adapter/motus_v1/smoke/seed_1/m1

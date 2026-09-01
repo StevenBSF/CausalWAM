@@ -1,0 +1,67 @@
+kind: policy_stage1_native_run
+schema_version: 1
+protocol_id: policy_protocol_v2_stage1_b_cr
+
+original_fastwam:
+  hydra_config: train
+  task_config: robotwin_uncond_3cam_384_1e-4
+  trainer: fastwam.trainer.Wan22Trainer
+  model_factory: fastwam.runtime.create_fastwam
+  initialization:
+    video_model_id: Wan-AI/Wan2.2-TI2V-5B
+    action_dit_pretrained_path: checkpoints/ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt
+    skip_dit_load_from_pretrain: false
+    resume: null
+  training:
+    num_epochs: 5
+    batch_size: 16
+    num_workers: 8
+    learning_rate: 0.0001
+    lr_scheduler_type: cosine
+    weight_decay: 0.01
+    gradient_accumulation_steps: 1
+    mixed_precision: bf16
+    seed: 42
+    formal_replication_seeds:
+      - 0
+      - 1
+      - 2
+  loss:
+    formula: lambda_video * L_video + lambda_action * L_action
+    lambda_video: 1.0
+    lambda_action: 1.0
+
+initialization_artifacts:
+  model_base_path: /mnt/cpfs-E/baoshifeng/FastWAM/checkpoints
+  action_dit_pretrained_path: /mnt/cpfs-E/baoshifeng/FastWAM/checkpoints/ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt
+
+data:
+  dataset: FastWAM RoboTwin2.0 release policy dataset
+  dataset_root: /mnt/cpfs-E/baoshifeng/FastWAM/data/robotwin2.0/robotwin2.0
+  official_manifest: experiments/robotwin/policy_content_adapter/configs/official_three_task_manifest.json
+  episode_selection_mode: full_550_per_task
+  task_order:
+    - place_a2b_left
+    - open_microwave
+    - move_stapler_pad
+  exact_counts_per_task:
+    clean: 50
+    official_random: 500
+    total: 550
+  sampling_mode: all_frames
+  native_fps: 50
+  interpolation: forbidden
+  dataset_stats:
+    path: outputs/policy_content_adapter/stage1_artifacts/full550_three_task_dataset_stats.json
+    sha256: __REQUIRED_STAGE1_FULL550_DATASET_STATS_SHA256__
+    provenance: Must be generated from this exact three-task full_550_per_task selection with stage1.py --prepare-dataset-stats, then supplied with its audit-locked SHA-256.
+  text_embedding_cache_dir: __REQUIRED_STAGE1_TEXT_EMBEDDING_CACHE_DIR__
+
+output:
+  directory: outputs/policy_content_adapter/stage1_clean_random_base
+  refuse_existing: true
+
+launch:
+  default_mode: audit_only
+  long_training_requires_flag: --launch-stage1-long-training
+  recommended_world_size: 8
