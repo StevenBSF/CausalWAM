@@ -2,8 +2,10 @@
   "schema": "causalwam.modelscope_upload_plan",
   "schema_version": 1,
   "created_utc": "2026-09-01T04:50:00Z",
-  "status": "READY_AFTER_MODELSCOPE_REPOSITORY_ID_IS_PROVIDED",
+  "status": "UPLOAD_SCRIPT_READY_MODELSCOPE_LOGIN_REQUIRED",
   "github_repository": "https://github.com/StevenBSF/CausalWAM",
+  "modelscope_repository": "https://www.modelscope.cn/datasets/StevenHZ/CausalWAM",
+  "upload_script": "scripts/upload_modelscope_causalwam.sh",
   "notes": [
     "GitHub is source-only; no model, data, cache, asset, optimizer, video, or log payload belongs in Git.",
     "Upload custom artifacts to ModelScope. Author release data/models may also be downloaded from their original Hugging Face repositories, but exact SHA verification remains mandatory.",
